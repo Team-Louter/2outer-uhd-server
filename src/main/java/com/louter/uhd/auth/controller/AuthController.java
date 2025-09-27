@@ -1,13 +1,16 @@
 package com.louter.uhd.auth.controller;
 
 import com.louter.uhd.auth.domain.User;
+import com.louter.uhd.auth.dto.request.LoginRequest;
 import com.louter.uhd.auth.dto.request.SendVerificationEmailRequest;
 import com.louter.uhd.auth.dto.request.SignupRequest;
 import com.louter.uhd.auth.dto.request.VerifyCodeRequest;
+import com.louter.uhd.auth.dto.response.LoginResponse;
 import com.louter.uhd.auth.dto.response.SendVerificationEmailResponse;
 import com.louter.uhd.auth.dto.response.SignupResponse;
 import com.louter.uhd.auth.dto.response.VerifyCodeResponse;
 import com.louter.uhd.auth.usecase.EmailUseCase;
+import com.louter.uhd.auth.usecase.LoginUseCase;
 import com.louter.uhd.auth.usecase.SignupUseCase;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +28,8 @@ import java.util.Map;
 public class AuthController {
     // 회원가입
     private final SignupUseCase signupUseCase;
+    // 로그인
+    private final LoginUseCase loginUseCase;
     // 이메일
     private final EmailUseCase emailUseCase;
 
@@ -44,5 +49,11 @@ public class AuthController {
     public ResponseEntity<Object> signup(@RequestBody SignupRequest signupRequest) {
         User user = signupUseCase.signup(signupRequest);
         return ResponseEntity.ok(SignupResponse.from(user));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+        Map<User, Object> response = loginUseCase.login(loginRequest);
+        return ResponseEntity.ok(LoginResponse.from(response));
     }
 }

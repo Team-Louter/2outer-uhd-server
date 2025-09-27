@@ -12,8 +12,8 @@ public class JwtAuthenticationFilter extends JwtUtil {
         super(secretKey, expiration);
     }
 
-    // 이메일로 토큰 생성
-    public String userEmailFromToken(String token) {
+    // 아이디로 토큰 생성
+    public String userIdFromToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
