@@ -1,17 +1,12 @@
 package com.louter.uhd.auth.controller;
 
 import com.louter.uhd.auth.domain.User;
-import com.louter.uhd.auth.dto.request.LoginRequest;
-import com.louter.uhd.auth.dto.request.SendVerificationEmailRequest;
-import com.louter.uhd.auth.dto.request.SignupRequest;
-import com.louter.uhd.auth.dto.request.VerifyCodeRequest;
-import com.louter.uhd.auth.dto.response.LoginResponse;
-import com.louter.uhd.auth.dto.response.SendVerificationEmailResponse;
-import com.louter.uhd.auth.dto.response.SignupResponse;
-import com.louter.uhd.auth.dto.response.VerifyCodeResponse;
+import com.louter.uhd.auth.dto.request.*;
+import com.louter.uhd.auth.dto.response.*;
 import com.louter.uhd.auth.usecase.EmailUseCase;
 import com.louter.uhd.auth.usecase.LoginUseCase;
 import com.louter.uhd.auth.usecase.SignupUseCase;
+import com.louter.uhd.auth.usecase.UpdateUserInfoUseCase;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +27,8 @@ public class AuthController {
     private final LoginUseCase loginUseCase;
     // 이메일
     private final EmailUseCase emailUseCase;
+    // 정보 수정
+    private final UpdateUserInfoUseCase updateUserInfoUseCase;
 
     @PostMapping("/email/send")
     public ResponseEntity<Object> signupEmail(@RequestBody SendVerificationEmailRequest request) {
@@ -55,5 +52,12 @@ public class AuthController {
     public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
         Map<User, Object> response = loginUseCase.login(loginRequest);
         return ResponseEntity.ok(LoginResponse.from(response));
+    }
+
+    @PostMapping("/update/pw")
+    public ResponseEntity<Object> updateUserId(@RequestBody UpdatePwRequest updatePwRequest) {
+        // 비밀번호 변경
+        User user = updateUserInfoUseCase.updateUserPassword(updatePwRequest);
+        return ResponseEntity.ok(UpdatePwResponse.from(user));
     }
 }
