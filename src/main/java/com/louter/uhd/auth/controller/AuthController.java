@@ -3,8 +3,10 @@ package com.louter.uhd.auth.controller;
 import com.louter.uhd.auth.domain.User;
 import com.louter.uhd.auth.dto.request.SendVerificationEmailRequest;
 import com.louter.uhd.auth.dto.request.SignupRequest;
+import com.louter.uhd.auth.dto.request.VerifyCodeRequest;
 import com.louter.uhd.auth.dto.response.SendVerificationEmailResponse;
 import com.louter.uhd.auth.dto.response.SignupResponse;
+import com.louter.uhd.auth.dto.response.VerifyCodeResponse;
 import com.louter.uhd.auth.usecase.EmailUseCase;
 import com.louter.uhd.auth.usecase.SignupUseCase;
 import jakarta.validation.constraints.Email;
@@ -30,6 +32,12 @@ public class AuthController {
     public ResponseEntity<Object> signupEmail(@RequestBody SendVerificationEmailRequest request) {
         Map<User, String> response = emailUseCase.sendVerificationEmail(request);
         return ResponseEntity.ok(SendVerificationEmailResponse.from(response));
+    }
+
+    @PostMapping("/email/verify")
+    public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest request) {
+        Map<User, String> response = emailUseCase.verifyCode(request);
+        return ResponseEntity.ok(VerifyCodeResponse.from(response));
     }
 
     @PostMapping("/signup")
