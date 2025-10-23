@@ -10,10 +10,7 @@ import com.louter.uhd.auth.usecase.UpdateUserInfoUseCase;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -31,31 +28,31 @@ public class AuthController {
     private final UpdateUserInfoUseCase updateUserInfoUseCase;
 
     @PostMapping("/email/send")
-    public ResponseEntity<Object> signupEmail(@RequestBody SendVerificationEmailRequest request) {
+    public ResponseEntity<SendVerificationEmailResponse> signupEmail(@RequestBody SendVerificationEmailRequest request) {
         Map<User, String> response = emailUseCase.sendVerificationEmail(request);
         return ResponseEntity.ok(SendVerificationEmailResponse.from(response));
     }
 
     @PostMapping("/email/verify")
-    public ResponseEntity<Object> verifyCode(@RequestBody VerifyCodeRequest request) {
+    public ResponseEntity<VerifyCodeResponse> verifyCode(@RequestBody VerifyCodeRequest request) {
         Map<User, String> response = emailUseCase.verifyCode(request);
         return ResponseEntity.ok(VerifyCodeResponse.from(response));
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<Object> signup(@RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<SignupResponse> signup(@RequestBody SignupRequest signupRequest) {
         User user = signupUseCase.signup(signupRequest);
         return ResponseEntity.ok(SignupResponse.from(user));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Object> login(@RequestBody LoginRequest loginRequest) {
+    @PatchMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         Map<User, Object> response = loginUseCase.login(loginRequest);
         return ResponseEntity.ok(LoginResponse.from(response));
     }
 
-    @PostMapping("/update/pw")
-    public ResponseEntity<Object> updateUserId(@RequestBody UpdatePwRequest updatePwRequest) {
+    @PatchMapping("/update/pw")
+    public ResponseEntity<UpdatePwResponse> updateUserId(@RequestBody UpdatePwRequest updatePwRequest) {
         // 비밀번호 변경
         User user = updateUserInfoUseCase.updateUserPassword(updatePwRequest);
         return ResponseEntity.ok(UpdatePwResponse.from(user));
