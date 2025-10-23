@@ -45,7 +45,7 @@ public class AuthController {
         return ResponseEntity.ok(SignupResponse.from(user));
     }
 
-    @PatchMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
         Map<User, Object> response = loginUseCase.login(loginRequest);
         return ResponseEntity.ok(LoginResponse.from(response));
