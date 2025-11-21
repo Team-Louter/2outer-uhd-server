@@ -1,6 +1,6 @@
 package com.louter.uhd.auth.jwt;
 
-import com.louter.uhd.auth.exception.TokenExpiredException;
+import com.louter.uhd.common.exception.TokenExpiredException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;

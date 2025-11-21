@@ -1,6 +1,8 @@
 package com.louter.uhd.auth.exception;
 
-public class AlreadyUsingAccountException extends AuthenticationException {
+import com.louter.uhd.common.exception.AlreadyUsingException;
+
+public class AlreadyUsingAccountException extends AlreadyUsingException {
     public AlreadyUsingAccountException(String message) {
         super(message);
     }

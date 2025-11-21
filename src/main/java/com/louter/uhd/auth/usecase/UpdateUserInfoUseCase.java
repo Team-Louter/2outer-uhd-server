@@ -18,21 +18,19 @@ public class UpdateUserInfoUseCase {
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
     // 예외 분리
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
 
     public User updateUserPassword(UpdatePwRequest updatePwRequest) {
         String userPassword = updatePwRequest.getUserPassword();
         String userId = updatePwRequest.getUserId();
 
-        validationUseCase.checkNull(userId);
-        validationUseCase.checkUserId(userId);
+        authValidationUseCase.checkUserId(userId);
 
         Optional<User> optionalUser = userRepository.findByUserId(userId);
         User user = optionalUser.orElseThrow(() ->
                 new UserNotFoundException("이메일이 조회되지 않음"));
 
-        validationUseCase.checkNull(userPassword);
-        validationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkUserPassword(userPassword);
 
         // 디비 수정
         userRepository.updateUserPassword(userId, passwordEncoder.encode(userPassword));

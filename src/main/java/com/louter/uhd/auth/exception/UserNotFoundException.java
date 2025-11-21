@@ -1,6 +1,8 @@
 package com.louter.uhd.auth.exception;
 
-public class UserNotFoundException extends AuthenticationException {
+import com.louter.uhd.common.exception.NotFoundException;
+
+public class UserNotFoundException extends NotFoundException {
     public UserNotFoundException(String message) {
         super(message);
     }

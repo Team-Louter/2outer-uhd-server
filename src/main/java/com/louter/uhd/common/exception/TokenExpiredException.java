@@ -1,4 +1,4 @@
-package com.louter.uhd.auth.exception;
+package com.louter.uhd.common.exception;
 
 public class TokenExpiredException extends AuthenticationException {
     public TokenExpiredException(String message) {
