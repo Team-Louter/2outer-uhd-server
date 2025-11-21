@@ -13,26 +13,26 @@ public class SignupUseCase {
     // 디비 접근
     private final UserRepository userRepository;
     // 예외 호출
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
 
     // 회원가입
     public User signup(SignupRequest signupRequest) {
         // 기본 예외 처리
-        validationUseCase.checkNull(signupRequest);
+        authValidationUseCase.checkNull(signupRequest);
 
         String userEmail = signupRequest.getUserEmail();
         String userId = signupRequest.getUserId();
         String userPassword = signupRequest.getUserPassword();
         String userName = signupRequest.getUserName();
 
-        validationUseCase.checkUserEmail(userEmail);
-        validationUseCase.checkUserId(userId);
-        validationUseCase.checkUserPassword(userPassword);
-        validationUseCase.checkUserName(userName);
+        authValidationUseCase.checkUserEmail(userEmail);
+        authValidationUseCase.checkUserId(userId);
+        authValidationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkUserName(userName);
 
-        validationUseCase.checkExistAccount(userEmail, userId);
+        authValidationUseCase.checkExistAccount(userEmail, userId);
 
         // 유저 생성
         User user = User.builder()

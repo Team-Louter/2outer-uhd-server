@@ -28,7 +28,7 @@ public class EmailUseCase {
     // 이메일-인증코드 저장용
     private final Map<String, Map<VerificationPurpose, CodeInfo>> codeMap = new HashMap<>();
     // 예외 호출
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
     private final UserRepository userRepository;
 
     // 인증 코드 생성
@@ -38,7 +38,7 @@ public class EmailUseCase {
 
     // 인증 코드 전송
     public Map<User, String> sendVerificationEmail(SendVerificationEmailRequest emailRequest) {
-        validationUseCase.checkUserEmail(emailRequest.getUserEmail());
+        authValidationUseCase.checkUserEmail(emailRequest.getUserEmail());
 
         String code = generateCode();
         // 이메일 - (목적 - 코드) 저장

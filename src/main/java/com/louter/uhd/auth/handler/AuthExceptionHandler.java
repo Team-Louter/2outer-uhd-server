@@ -1,6 +1,5 @@
 package com.louter.uhd.auth.handler;
 
-import com.louter.uhd.auth.domain.User;
 import com.louter.uhd.auth.exception.AlreadyUsingAccountException;
 import com.louter.uhd.auth.exception.AuthenticationException;
 import com.louter.uhd.auth.exception.IllegalArgsException;

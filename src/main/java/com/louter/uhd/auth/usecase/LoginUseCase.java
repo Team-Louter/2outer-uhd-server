@@ -5,6 +5,7 @@ import com.louter.uhd.auth.dto.request.LoginRequest;
 import com.louter.uhd.auth.exception.UserNotFoundException;
 import com.louter.uhd.auth.jwt.JwtTokenProvider;
 import com.louter.uhd.auth.repository.UserRepository;
+import com.louter.uhd.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ public class LoginUseCase {
     // 디비 접근
     private final UserRepository userRepository;
     // 예외 이용
-    private final ValidationUseCase validationUseCase;
+    private final AuthValidationUseCase authValidationUseCase;
     // 비밀번호 암호화
     private final PasswordEncoder passwordEncoder;
     // Jwt 토큰 생성
@@ -27,13 +28,13 @@ public class LoginUseCase {
     // 로그인, 토큰 반환
     public Map<User, Object> login(LoginRequest loginRequest) {
         // 기본 예외 확인
-        validationUseCase.checkNull(loginRequest);
+        authValidationUseCase.checkNull(loginRequest);
 
         String userId = loginRequest.getUserId();
         String userPassword = loginRequest.getUserPassword();
 
-        validationUseCase.checkUserId(userId);
-        validationUseCase.checkUserPassword(userPassword);
+        authValidationUseCase.checkUserId(userId);
+        authValidationUseCase.checkUserPassword(userPassword);
 
         Optional<User> optionalUser = userRepository.findByUserId(userId);
 
