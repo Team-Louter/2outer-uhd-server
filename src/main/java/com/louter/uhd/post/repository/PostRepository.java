@@ -31,5 +31,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> searchByKeyword(@Param("keyword") String keyword);
 
     // 상태 별 게시글 조회
-    List<Post> findByPostStatus(Status postStatus);
+    List<Post> findByPostStatusOrderByPostCreatedAtDesc(Status postStatus);
 }

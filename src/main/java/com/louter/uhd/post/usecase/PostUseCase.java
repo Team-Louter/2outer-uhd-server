@@ -46,7 +46,7 @@ public class PostUseCase {
     // 특정 게시글 조회
     @Transactional
     public Post getPost(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         // 조회수 증가
@@ -72,8 +72,13 @@ public class PostUseCase {
     }
 
     // 인증 게시글 상태별 조회
-    public List<Post> getPostsByStatus(Status status) {
-        return postRepository.findByPostStatus(status);
+    public List<Post> getPostsByStatus(String status) {
+        Status postStatus;
+        if (status.equals("FIND"))
+            postStatus = Status.FIND;
+        else
+            postStatus = Status.LOST;
+        return postRepository.findByPostStatusOrderByPostCreatedAtDesc(postStatus);
     }
 
     // 게시글 수정

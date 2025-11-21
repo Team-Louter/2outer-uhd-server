@@ -1,5 +1,6 @@
 package com.louter.uhd.post.controller;
 
+import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.common.dto.ApiResponse;
 import com.louter.uhd.post.domain.Post;
 import com.louter.uhd.post.domain.Status;
@@ -33,59 +34,67 @@ public class PostController {
     }
 
     // 특정 게시글 조회
-    @GetMapping("/{postId}")
+    @GetMapping("/find/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> findPost(@PathVariable Long postId) {
         Post post = postUseCase.getPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 게시글 목록 조회
-    @GetMapping("/find")
-    public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByChannel() {
+    @GetMapping("/find/all")
+    public ResponseEntity<ApiResponse<List<FindPostResponse>>> getPostsByChannel() {
         List<Post> posts = postUseCase.getPosts();
-        return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
+        return ResponseEntity.ok(ApiResponse.success(
+                posts.stream()
+                    .map(FindPostResponse::from)
+                    .toList()
+        ));
     }
 
     // 특정 유저의 게시글 목록 조회
     @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByUser(@PathVariable String userId) {
+    public ResponseEntity<ApiResponse<List<FindPostResponse>>> getPostsByUser(@PathVariable String userId) {
         List<Post> posts = postUseCase.getPostsByUser(userId);
-        return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
+        return ResponseEntity.ok(ApiResponse.success(
+                posts.stream()
+                        .map(FindPostResponse::from)
+                        .toList()
+        ));
     }
 
     // 게시글 검색
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<FindPostResponse>> searchPosts(@ModelAttribute SearchPostsRequest request) {
+    public ResponseEntity<ApiResponse<List<FindPostResponse>>> searchPosts(@ModelAttribute SearchPostsRequest request) {
         List<Post> posts = postUseCase.searchPosts(request);
-        return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
+        return ResponseEntity.ok(ApiResponse.success(
+                posts.stream()
+                        .map(FindPostResponse::from)
+                        .toList()
+        ));
     }
 
     // 게시글 수정
-    @PutMapping("/{postId}")
+    @PutMapping("/update/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request) {
         Post post = postUseCase.updatePost(postId, request);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
     }
 
     // 게시글 삭제(유저 본인)
-    @DeleteMapping("/{postId}")
+    @DeleteMapping("/delete/{postId}")
     public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long postId) {
         postUseCase.deletePost(postId);
         return ResponseEntity.ok(ApiResponse.success());
     }
 
-    // admin
-    // 게시글 삭제 (관리자)
-    @DeleteMapping("/admin/{postId}")
-    public ResponseEntity<ApiResponse<Void>> deletePostByAdmin(@PathVariable Long postId) {
-        postUseCase.deletePostByAdmin(postId);
-        return ResponseEntity.ok(ApiResponse.success());
-    }
-
-    // 상태별 게시글 조회 (인증게시글)
-    @GetMapping("/admin/status/{status}")
-    public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByStatus(@PathVariable Status status) {
+    // FIND 게시물 조회
+    @GetMapping("/find/{status}")
+    public ResponseEntity<ApiResponse<List<FindPostResponse>>> findPostsByPostStatus(@PathVariable String status) {
         List<Post> posts = postUseCase.getPostsByStatus(status);
-        return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
+        return ResponseEntity.ok(ApiResponse.success(
+                posts.stream()
+                .map(FindPostResponse::from)
+                .toList()
+        ));
     }
 }
