@@ -16,18 +16,11 @@ public class SendVerificationEmailResponse {
     private Boolean success;
     @NotNull
     private String userEmail;
-    @NotNull
-    private String code;
 
-    public static SendVerificationEmailResponse from(Map<User, String> response) {
-        Map.Entry<User, String> entry = response.entrySet().iterator().next();
-        User user = entry.getKey();
-        String code = entry.getValue();
-
+    public static SendVerificationEmailResponse from(User user) {
         return SendVerificationEmailResponse.builder()
                 .success(true)
                 .userEmail(user.getUserEmail())
-                .code(code)
                 .build();
     }
 }

@@ -16,18 +16,11 @@ public class VerifyCodeResponse {
     private Boolean success;
     @NotNull
     private String userEmail;
-    @NotNull
-    private String code;
 
-    public static VerifyCodeResponse from(Map<User, String> response) {
-        Map.Entry<User, String> entry = response.entrySet().iterator().next();
-        User user = entry.getKey();
-        String code = entry.getValue();
-
+    public static VerifyCodeResponse from(User user) {
         return VerifyCodeResponse.builder()
                 .success(true)
                 .userEmail(user.getUserEmail())
-                .code(code)
                 .build();
     }
 }
