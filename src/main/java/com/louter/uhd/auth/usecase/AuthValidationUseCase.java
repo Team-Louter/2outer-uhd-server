@@ -2,6 +2,8 @@ package com.louter.uhd.auth.usecase;
 
 import com.louter.uhd.auth.dto.request.LoginRequest;
 import com.louter.uhd.auth.dto.request.SignupRequest;
+import com.louter.uhd.auth.exception.AlreadyUsingAccountException;
+import com.louter.uhd.auth.repository.UserRepository;
 import com.louter.uhd.common.usecase.ValidationUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 public class AuthValidationUseCase {
     // DI
     private final ValidationUseCase validationUseCase;
+    private final UserRepository userRepository;
 
     // 널 값 확인 - 로그인
     public void checkNull(LoginRequest loginRequest) {
@@ -75,6 +78,12 @@ public class AuthValidationUseCase {
     public void checkUserName(String userName) {
         if (userName.length() < 1 || userName.length() > 20) {
             throw new IllegalArgumentException("이름 오류");
+        }
+    }
+
+    public void checkExistAccount(String userEmail, String userId) {
+        if (userRepository.existsByUserEmail(userEmail) || userRepository.existsByUserId(userId)) {
+            throw new AlreadyUsingAccountException("존재하는 계정");
         }
     }
 }

@@ -14,7 +14,7 @@ public class ValidationConfig {
     }
 
     @Bean
-    public AuthValidationUseCase authValidationUseCase(ValidationUseCase validationUseCase) {
-        return new AuthValidationUseCase(validationUseCase);
+    public AuthValidationUseCase authValidationUseCase(ValidationUseCase validationUseCase, UserRepository userRepository) {
+        return new AuthValidationUseCase(validationUseCase, userRepository);
     }
 }
