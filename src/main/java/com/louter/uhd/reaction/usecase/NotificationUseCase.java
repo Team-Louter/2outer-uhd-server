@@ -1,5 +1,6 @@
 package com.louter.uhd.reaction.usecase;
 
+import com.louter.uhd.common.usecase.EmailSenderUseCase;
 import com.louter.uhd.reaction.dto.request.CommentNotificationRequest;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class NotificationUseCase extends EmailSenderUseCase {
     }
 
     public void sendCommentNotification(CommentNotificationRequest commentNotificationRequest) {
-        String subject = "[ReBloom] 내 글에 새로운 댓글이 달렸습니다.";
+        String subject = "[Uhd] 내 글에 새로운 댓글이 달렸습니다.";
         String text = String.format(
                 "%s님, \n%s님이 회원님의 게시글에 댓글을 남겼습니다.\n댓글 내용: %s\n지금 바로 ReBloom에서 확인해보세요!",
                 commentNotificationRequest.getOwnerUserId(),
