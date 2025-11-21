@@ -1,5 +1,6 @@
 package com.louter.uhd.post.controller;
 
+import com.louter.uhd.common.dto.ApiResponse;
 import com.louter.uhd.post.domain.Post;
 import com.louter.uhd.post.domain.Status;
 import com.louter.uhd.post.dto.request.CreatePostRequest;
@@ -49,13 +50,6 @@ public class PostController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<ApiResponse<FindPostResponse>> getPostsByUser(@PathVariable String userId) {
         List<Post> posts = postUseCase.getPostsByUser(userId);
-        return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
-    }
-
-    // 인기글 조회
-    @GetMapping("/popular")
-    public ResponseEntity<ApiResponse<FindPostResponse>> getPopularPosts() {
-        List<Post> posts = postUseCase.getPopularPosts();
         return ResponseEntity.ok(ApiResponse.success(FindPostResponse.from(posts)));
     }
 
