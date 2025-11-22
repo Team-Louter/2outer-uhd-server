@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Builder
 @Table(name = "comments")
 public class Comment {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "co_id", nullable = false)
@@ -32,12 +31,12 @@ public class Comment {
     private LocalDateTime commentCreatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "fk_u_email", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "fk_u_id", referencedColumnName = "u_id", nullable = false, updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "fk_p_id", nullable = false, insertable = false, updatable = false)
+    @JoinColumn(name = "fk_p_id", referencedColumnName = "p_id", nullable = false, insertable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Post post;
 }
