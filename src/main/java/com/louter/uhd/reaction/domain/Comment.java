@@ -32,7 +32,7 @@ public class Comment {
     private LocalDateTime commentCreatedAt;
 
     @ManyToOne
-    @JoinColumn(name = "fk_u_email", nullable = false, updatable = false, insertable = false)
+    @JoinColumn(name = "fk_u_id", referencedColumnName = "u_id", nullable = false, updatable = false, insertable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
