@@ -16,8 +16,6 @@ public class CreatePostResponse {
     @NotNull
     private String userId;
     @NotNull
-    private Long channelId;
-    @NotNull
     private String postTitle;
     @NotNull
     private String postContent;

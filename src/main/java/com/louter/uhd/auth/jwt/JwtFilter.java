@@ -9,31 +9,39 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtAuthenticationFilter jwtAuth;
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
+
+    private static final List<String> PERMIT_ALL_PATHS = Arrays.asList(
+            "/",
+            "/auth/signup",
+            "/auth/login",
+            "/auth/login/**",
+            "/post/**",
+            "/comment/**",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/api-docs",
+            "/favicon.ico"
+    );
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
 
-
-        // 필터 지정
-        if (path.equals("/favicon.ico") ||
-                path.startsWith("/.well-known/") ||
-                path.equals("/") ||
-                path.startsWith("/auth/") ||
-                path.startsWith("/email/") ||
-                path.startsWith("/swagger-ui/") ||
-                path.startsWith("/v3/api-docs/") ||
-                path.startsWith("/api-docs")) {
+        if (isPermitAllPath(path)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -55,5 +63,16 @@ public class JwtFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isPermitAllPath(String path) {
+        return PERMIT_ALL_PATHS.stream()
+                .anyMatch(pattern -> pathMatcher.match(pattern, path));
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, String error, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType("application/json;charset=UTF-8");
+        response.getWriter().write(String.format("{\"error\": \"%s\", \"message\": \"%s\"}", error, message));
     }
 }

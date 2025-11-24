@@ -38,6 +38,7 @@ public class PostUseCase {
                 .postTitle(request.getPostTitle())
                 .postContent(request.getPostContent())
                 .postImage(request.getPostImage())
+                .postStatus(request.getPostStatus())
                 .build();
 
         return postRepository.save(post);
