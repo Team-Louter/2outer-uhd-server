@@ -1,13 +1,12 @@
 package com.louter.uhd.post.controller;
 
-import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.common.dto.ApiResponse;
 import com.louter.uhd.post.domain.Post;
-import com.louter.uhd.post.domain.Status;
 import com.louter.uhd.post.dto.request.CreatePostRequest;
 import com.louter.uhd.post.dto.request.SearchPostsRequest;
 import com.louter.uhd.post.dto.request.UpdatePostRequest;
 import com.louter.uhd.post.dto.response.CreatePostResponse;
+import com.louter.uhd.post.dto.response.FindDetailedPostInfoResponse;
 import com.louter.uhd.post.dto.response.FindPostResponse;
 import com.louter.uhd.post.usecase.PostUseCase;
 import jakarta.validation.Valid;
@@ -72,6 +71,14 @@ public class PostController {
                         .toList()
         ));
     }
+
+    // 게시글 세부 정보 검색
+    @GetMapping("/find/{postTitle}")
+    public ResponseEntity<ApiResponse<FindDetailedPostInfoResponse>> findDetailedPostInfo(@PathVariable String postTitle) {
+        Post post = postUseCase.findDetailedPost(postTitle);
+        return ResponseEntity.ok(ApiResponse.success(FindDetailedPostInfoResponse.from(post)));
+    }
+
 
     // 게시글 수정
     @PutMapping("/update/{postId}")

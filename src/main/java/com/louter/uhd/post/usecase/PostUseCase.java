@@ -7,7 +7,6 @@ import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.post.domain.Post;
 import com.louter.uhd.post.domain.Status;
 import com.louter.uhd.post.dto.request.CreatePostRequest;
-import com.louter.uhd.post.dto.request.FindDetailedPostInfoRequest;
 import com.louter.uhd.post.dto.request.SearchPostsRequest;
 import com.louter.uhd.post.dto.request.UpdatePostRequest;
 import com.louter.uhd.post.exception.ForbiddenAccessException;
@@ -126,8 +125,8 @@ public class PostUseCase {
     }
 
     @Transactional
-    public Post findDetailedPost(FindDetailedPostInfoRequest request) {
-        Post post = postRepository.findByPostTitle(request.getPostTitle())
+    public Post findDetailedPost(String postTitle) {
+        Post post = postRepository.findByPostTitle(postTitle)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         post.setPostViewers(post.getPostViewers() + 1);
