@@ -69,13 +69,27 @@ public class PostUseCase {
 
     // 게시글 검색
     public List<Post> searchPosts(SearchPostsRequest request) {
-        return postRepository.searchByKeyword(request.getKeyword());
+//        return postRepository.searchByKeyword("%" + request.getKeyword() + "%");
+        String keyword = "%" + request.getKeyword() + "%";
+        System.out.println("=== 검색 시작 ===");
+        System.out.println("원본 키워드: " + request.getKeyword());
+        System.out.println("변환된 키워드: " + keyword);
+
+        List<Post> results = postRepository.searchByKeyword(keyword);
+
+        System.out.println("검색 결과 수: " + results.size());
+        if (!results.isEmpty()) {
+            System.out.println("첫 번째 결과: " + results.get(0).getPostTitle());
+        }
+        System.out.println("=== 검색 종료 ===");
+
+        return results;
     }
 
     // 인증 게시글 상태별 조회
     public List<Post> getPostsByStatus(String status) {
         Status postStatus;
-        if (status.equals("FIND"))
+        if (status.equals("find"))
             postStatus = Status.FIND;
         else
             postStatus = Status.LOST;

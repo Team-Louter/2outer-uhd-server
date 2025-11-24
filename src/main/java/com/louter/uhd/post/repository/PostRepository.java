@@ -2,6 +2,7 @@ package com.louter.uhd.post.repository;
 
 import com.louter.uhd.post.domain.Post;
 import com.louter.uhd.post.domain.Status;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,12 +25,12 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // 게시글 조회 - postTitle
     Optional<Post> findByPostTitle(String postTitle);
 
-    // 특정 키워드를 제목이나 설명에 포함한 게시글 조회(최신순)
+    // 특정 키워드를 제목이나 내용에 포함한 게시글 조회(최신순)
     @Query("""
         select p from Post p
-        where p.postTitle like concat('%', :keyword, '%')
-            or p.postContent like concat('%', :keyword, '%')
-        order by p.postTitle asc
+        where p.postTitle like :keyword
+            or p.postContent like :keyword
+        order by p.postCreatedAt desc
     """)
     List<Post> searchByKeyword(@Param("keyword") String keyword);
 

@@ -33,7 +33,7 @@ public class PostController {
     }
 
     // 특정 게시글 조회
-    @GetMapping("/find/{postId}")
+    @GetMapping("/find/id/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> findPost(@PathVariable Long postId) {
         Post post = postUseCase.getPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
@@ -73,7 +73,7 @@ public class PostController {
     }
 
     // 게시글 세부 정보 검색
-    @GetMapping("/find/{postTitle}")
+    @GetMapping("/find/title/{postTitle}")
     public ResponseEntity<ApiResponse<FindDetailedPostInfoResponse>> findDetailedPostInfo(@PathVariable String postTitle) {
         Post post = postUseCase.findDetailedPost(postTitle);
         return ResponseEntity.ok(ApiResponse.success(FindDetailedPostInfoResponse.from(post)));
@@ -95,7 +95,7 @@ public class PostController {
     }
 
     // FIND 게시물 조회
-    @GetMapping("/find/{status}")
+    @GetMapping("/find/status/{status}")
     public ResponseEntity<ApiResponse<List<FindPostResponse>>> findPostsByPostStatus(@PathVariable String status) {
         List<Post> posts = postUseCase.getPostsByStatus(status);
         return ResponseEntity.ok(ApiResponse.success(
