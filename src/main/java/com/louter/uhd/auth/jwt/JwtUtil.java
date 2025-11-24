@@ -16,7 +16,7 @@ public class JwtUtil {
         this.expiration = expiration;
     }
 
-    public String getCurrentUserEmail() {
+    public String getCurrentUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null) {
             return authentication.getName();

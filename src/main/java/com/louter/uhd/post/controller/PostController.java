@@ -1,13 +1,12 @@
 package com.louter.uhd.post.controller;
 
-import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.common.dto.ApiResponse;
 import com.louter.uhd.post.domain.Post;
-import com.louter.uhd.post.domain.Status;
 import com.louter.uhd.post.dto.request.CreatePostRequest;
 import com.louter.uhd.post.dto.request.SearchPostsRequest;
 import com.louter.uhd.post.dto.request.UpdatePostRequest;
 import com.louter.uhd.post.dto.response.CreatePostResponse;
+import com.louter.uhd.post.dto.response.FindDetailedPostInfoResponse;
 import com.louter.uhd.post.dto.response.FindPostResponse;
 import com.louter.uhd.post.usecase.PostUseCase;
 import jakarta.validation.Valid;
@@ -34,7 +33,7 @@ public class PostController {
     }
 
     // 특정 게시글 조회
-    @GetMapping("/find/{postId}")
+    @GetMapping("/find/id/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> findPost(@PathVariable Long postId) {
         Post post = postUseCase.getPost(postId);
         return ResponseEntity.ok(ApiResponse.success(CreatePostResponse.from(post)));
@@ -73,6 +72,14 @@ public class PostController {
         ));
     }
 
+    // 게시글 세부 정보 검색
+    @GetMapping("/find/title/{postTitle}")
+    public ResponseEntity<ApiResponse<FindDetailedPostInfoResponse>> findDetailedPostInfo(@PathVariable String postTitle) {
+        Post post = postUseCase.findDetailedPost(postTitle);
+        return ResponseEntity.ok(ApiResponse.success(FindDetailedPostInfoResponse.from(post)));
+    }
+
+
     // 게시글 수정
     @PutMapping("/update/{postId}")
     public ResponseEntity<ApiResponse<CreatePostResponse>> updatePost(@PathVariable Long postId, @Valid @RequestBody UpdatePostRequest request) {
@@ -88,7 +95,7 @@ public class PostController {
     }
 
     // FIND 게시물 조회
-    @GetMapping("/find/{status}")
+    @GetMapping("/find/status/{status}")
     public ResponseEntity<ApiResponse<List<FindPostResponse>>> findPostsByPostStatus(@PathVariable String status) {
         List<Post> posts = postUseCase.getPostsByStatus(status);
         return ResponseEntity.ok(ApiResponse.success(

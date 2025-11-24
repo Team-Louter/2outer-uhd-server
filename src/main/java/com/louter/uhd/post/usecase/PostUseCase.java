@@ -38,6 +38,7 @@ public class PostUseCase {
                 .postTitle(request.getPostTitle())
                 .postContent(request.getPostContent())
                 .postImage(request.getPostImage())
+                .postStatus(request.getPostStatus())
                 .build();
 
         return postRepository.save(post);
@@ -68,7 +69,7 @@ public class PostUseCase {
 
     // 게시글 검색
     public List<Post> searchPosts(SearchPostsRequest request) {
-        return postRepository.searchByKeyword(request.getKeyword());
+        return postRepository.searchByKeyword("%" + request.getKeyword() + "%");
     }
 
     // 인증 게시글 상태별 조회
@@ -118,9 +119,19 @@ public class PostUseCase {
     // 게시글 삭제 (관리자)
     @Transactional
     public void deletePostByAdmin(Long postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 
         postRepository.delete(post);
+    }
+
+    @Transactional
+    public Post findDetailedPost(String postTitle) {
+        Post post = postRepository.findByPostTitle(postTitle)
+                .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
+
+        post.setPostViewers(post.getPostViewers() + 1);
+
+        return postRepository.save(post);
     }
 }

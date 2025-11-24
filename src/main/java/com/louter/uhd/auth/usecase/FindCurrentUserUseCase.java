@@ -16,9 +16,10 @@ public class FindCurrentUserUseCase {
     private final UserRepository userRepository;
 
     public User getCurrentUser() {
-        String email = jwtUtil.getCurrentUserEmail();
+        String id = jwtUtil.getCurrentUserId();
+        System.out.println("Id");
 
-        return userRepository.findByUserEmail(email)
+        return userRepository.findByUserId(id)
                 .orElseThrow(() -> new UserNotFoundException("유저 조회 실패"));
     }
 }
