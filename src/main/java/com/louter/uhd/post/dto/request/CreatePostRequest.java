@@ -9,9 +9,6 @@ public class CreatePostRequest {
     private String userId;
 
     @NotNull
-    private Long channelId;
-
-    @NotNull
     private String postTitle;
 
     @NotNull
