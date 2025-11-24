@@ -40,7 +40,7 @@ public class CommentUseCase {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // 게시글 조회
-        Post post = postRepository.findById(request.getPostId())
+        Post post = postRepository.findByPostId(request.getPostId())
                 .orElseThrow(() -> new PostNotFoundException("Post not found"));
 
         // 댓글 생성

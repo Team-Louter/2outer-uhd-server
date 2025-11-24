@@ -60,7 +60,7 @@ public class CommentController {
     }
 
     // 댓글 수정
-    @PutMapping("/{commentId}")
+    @PutMapping("/update/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> updateComment(
             @PathVariable Long commentId,
             @Valid @RequestBody UpdateCommentRequest request

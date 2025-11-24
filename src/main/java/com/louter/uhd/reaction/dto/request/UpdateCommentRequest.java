@@ -6,7 +6,5 @@ import lombok.Getter;
 @Getter
 public class UpdateCommentRequest {
     @NotNull
-    private Long commentId;
-    @NotNull
     private String commentContent;
 }
