@@ -2,6 +2,7 @@ package com.louter.uhd.post.usecase;
 
 import com.louter.uhd.auth.domain.User;
 import com.louter.uhd.auth.exception.UserNotFoundException;
+import com.louter.uhd.auth.jwt.JwtTokenProvider;
 import com.louter.uhd.auth.repository.UserRepository;
 import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.post.domain.Post;
@@ -14,6 +15,8 @@ import com.louter.uhd.post.exception.PostNotFoundException;
 import com.louter.uhd.post.repository.PostRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +27,7 @@ public class PostUseCase {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 게시글 생성
     @Transactional
@@ -102,7 +106,10 @@ public class PostUseCase {
 
     // 게시글 삭제(유저 본인)
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(String token, Long postId) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
         Post post = postRepository.findById(postId)
                 .orElseThrow(() -> new PostNotFoundException("Post Not Found"));
 

@@ -2,6 +2,7 @@ package com.louter.uhd.reaction.usecase;
 
 import com.louter.uhd.auth.domain.User;
 import com.louter.uhd.auth.exception.UserNotFoundException;
+import com.louter.uhd.auth.jwt.JwtTokenProvider;
 import com.louter.uhd.auth.repository.UserRepository;
 import com.louter.uhd.auth.usecase.FindCurrentUserUseCase;
 import com.louter.uhd.post.domain.Post;
@@ -15,6 +16,8 @@ import com.louter.uhd.reaction.dto.request.UpdateCommentRequest;
 import com.louter.uhd.reaction.exception.CommentNotFoundException;
 import com.louter.uhd.reaction.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +34,7 @@ public class CommentUseCase {
     // 함수 호출
     private final NotificationUseCase notificationUseCase;
     private final FindCurrentUserUseCase findCurrentUserUseCase;
+    private final JwtTokenProvider jwtTokenProvider;
 
     // 댓글 생성
     @Transactional
@@ -96,9 +100,12 @@ public class CommentUseCase {
 
     // 댓글 수정
     @Transactional
-    public Comment updateComment(Long commentId, UpdateCommentRequest request) {
+    public Comment updateComment(Long commentId, String token, UpdateCommentRequest request) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException("Comment not found"));
+
+        Authentication authentication = jwtTokenProvider.getAuthentication(token);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String userId = findCurrentUserUseCase.getCurrentUser().getUserId();
 
