@@ -62,10 +62,11 @@ public class CommentController {
     // 댓글 수정
     @PutMapping("/update/{commentId}")
     public ResponseEntity<ApiResponse<CreateCommentResponse>> updateComment(
+            @RequestHeader String token,
             @PathVariable Long commentId,
             @Valid @RequestBody UpdateCommentRequest request
     ) {
-        Comment comment = commentUseCase.updateComment(commentId, request);
+        Comment comment = commentUseCase.updateComment(commentId, token, request);
         return ResponseEntity.ok(ApiResponse.success(CreateCommentResponse.from(comment)));
     }
 
